@@ -1,3 +1,6 @@
+[![npm version](http://img.shields.io/npm/v/@unification-com/und-js-v2.svg?style=flat)](https://npmjs.org/package/@unification-com/und-js-v2 "View this project on npm")
+
+
 # und-js-v2
 
 The FUND Javascript SDK supporting Cosmos SDK `stargate` (>= v0.42.x)
