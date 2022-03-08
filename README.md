@@ -41,3 +41,10 @@ Proto Javascript can be regenerated using the script:
 ```
 
 This is required, for example, when proto definitions change for Cosmos SDK, Tendermint, Mainchain etc.
+
+`proto.js` needs a slight tweak after the script runs:
+
+```javascript
+// Exported root namespace
+const $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
+```

@@ -12,13 +12,13 @@ const redelValAddress = "undvaloper13lyhcfekkdczaugqaexya60ckn23l5wazf07px"
 
 let fee = {
 	"denom": "nund",
-	"amount": "250000",
+	"amount": "25000000",
 	"gas": "200000"
 }
 
 let delFee = {
 	"denom": "nund",
-	"amount": "2500000",
+	"amount": "250000000",
 	"gas": "1000000"
 }
 
