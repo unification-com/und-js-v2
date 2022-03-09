@@ -1,12 +1,12 @@
+import 'dotenv/config'
 import { UndClient } from "../src/index.js"
 // The mnemonic for the DevNet node1 account can be used for testing
 // see https://github.com/unification-com/mainchain/tree/master/Docker
-const mnemonic = "SET_MNEMONIC_HERE";
+const mnemonic = process.env.MNEMONIC;
 const denomFund = "fund"
 const amountFund = 2.00177011
 
 const targetAddress = "und150xrwj6ca9kyzz20e4x0qj6zm0206jhe4tk7nf"
-const targetAddress1 = "und1eq239sgefyzm4crl85nfyvt7kw83vrna3f0eed"
 const valAddress = "undvaloper1eq239sgefyzm4crl85nfyvt7kw83vrna6lrjet"
 const redelValAddress = "undvaloper13lyhcfekkdczaugqaexya60ckn23l5wazf07px"
 

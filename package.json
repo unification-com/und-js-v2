@@ -59,6 +59,7 @@
     "babelify": "^10.0.0",
     "browser-resolve": "^2.0.0",
     "cross-env": "^7.0.3",
+    "dotenv": "^16.0.0",
     "eslint": "^8.10.0",
     "esmify": "^2.1.1",
     "jsdoc-to-markdown": "^7.1.1",
