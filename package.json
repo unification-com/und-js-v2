@@ -1,9 +1,8 @@
 {
   "name": "@unification-com/und-js-v2",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Unification Mainchain Wallet SDK v2",
   "main": "lib/index.js",
-  "type": "module",
   "engines": {
     "node": ">=14.0.0"
   },
