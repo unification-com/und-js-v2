@@ -1,5 +1,4 @@
-import 'dotenv/config'
-import { UndClient } from "../src/index.js"
+require("dotenv").config()
 // The mnemonic for the DevNet node1 account can be used for testing
 // see https://github.com/unification-com/mainchain/tree/master/Docker
 const mnemonic = process.env.MNEMONIC;
@@ -22,10 +21,16 @@ let delFee = {
 	"gas": "1000000"
 }
 
+const getUndClient = async () => {
+	const UndClient = await import("../lib/index.js")
+	return UndClient.default.UndClient
+}
+
 async function run() {
 
 	// DevNet must be running
-	const fund = new UndClient("http://localhost:1317");
+	const UndClient = await getUndClient()
+	const fund = new UndClient("http://localhost");
 	await fund.initChain()
 	const privKey = UndClient.crypto.getPrivateKeyFromMnemonic(mnemonic)
 
@@ -48,7 +53,7 @@ async function run() {
 	// fund.redelegate(valAddress, redelValAddress,10, delFee, "fund").then(response => console.log(response));
 	// fund.withdrawDelegationReward(valAddress, delFee, true).then(response => console.log(response));
 	// fund.getBalance().then(response => console.log(response));
-	// fund.getTransactions().then(response => console.log(response));
+	fund.getTransactions('und15s4ec3s97tu4pstk8tq86l5ues4dxnmadqmrjl').then(response => console.log(response));
 	// fund.getTransactionsReceived().then(response => console.log(response));
 
 	// first, submit a proposal using the und cli, e.g.
