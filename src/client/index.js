@@ -959,9 +959,14 @@ export class UndClient {
   createAccountWithMneomnic() {
     const mnemonic = fundCrypto.generateMnemonic()
     const privateKey = fundCrypto.getPrivateKeyFromMnemonic(mnemonic)
-    const address = fundCrypto.getAddressFromPrivateKey(privateKey, CONFIG.BECH32_PREFIX)
+    const privateKeyHex = privateKey.toString("hex")
+    const address = fundCrypto.getAddressFromPrivateKey(privateKeyHex, CONFIG.BECH32_PREFIX)
+    const hdPath = `${CONFIG.HD_PATH}0`
     return {
+      index: 0,
+      hdPath,
       privateKey,
+      privateKeyHex,
       address,
       mnemonic
     }
@@ -993,12 +998,17 @@ export class UndClient {
    * address
    * }
    */
-  recoverAccountFromMnemonic(mnemonic) {
-    const privateKey = fundCrypto.getPrivateKeyFromMnemonic(mnemonic)
-    const address = fundCrypto.getAddressFromPrivateKey(privateKey, CONFIG.BECH32_PREFIX)
+  recoverAccountFromMnemonic(mnemonic, index = 0) {
+    const privateKey = fundCrypto.getPrivateKeyFromMnemonic(mnemonic, true, index)
+    const privateKeyHex = privateKey.toString("hex")
+    const address = fundCrypto.getAddressFromPrivateKey(privateKeyHex, CONFIG.BECH32_PREFIX)
+    const hdPath = `${CONFIG.HD_PATH}${index}`
     return {
+      index,
+      hdPath,
       privateKey,
-      address
+      privateKeyHex,
+      address,
     }
   }
 
