@@ -28,10 +28,15 @@ const getUndClient = async () => {
 
 async function run() {
 
-	// DevNet must be running
 	const UndClient = await getUndClient()
-	const fund = new UndClient("http://localhost");
+	// DevNet
+	const fund = new UndClient("http://localhost:1317");
+	// TestNet
+	// const fund = new UndClient("https://rest-testnet.unification.io");
+
 	await fund.initChain()
+	// get only the private key from a mnemonic. It is also possible use the recoverAccountFromMnemonic
+	// function to get more data, such as the wallet address and HD path (see further below for examples).
 	const privKey = UndClient.crypto.getPrivateKeyFromMnemonic(mnemonic)
 
 	// set key using the returned Buffer
@@ -40,6 +45,25 @@ async function run() {
 	// key can also be set as a hex string
 	// await fund.setPrivateKey(privKey.toString("hex"))
 
+	// Mnemonics and keys can be generated, this will return
+	// - a new nmemonic
+	// - private key in Buffer and hex string for acc 0
+	// - the wallet address
+	// const newAcc = fund.createAccountWithMneomnic()
+	// console.log(newAcc)
+	// await fund.setPrivateKey(newAcc.privateKey)
+	// const pubK = fund.getPubKeyAny()
+	// console.log(pubK)
+
+	// Account data can be also be recovered from a mnemonic, this will return
+	// - private key in Buffer and hex string for given account index (default is 0)
+	// - the wallet address
+	// const recAcc0 = fund.recoverAccountFromMnemonic(mnemonic)
+	// const recAcc1 = fund.recoverAccountFromMnemonic(mnemonic, 1)
+	// console.log(recAcc0)
+	// console.log(recAcc1)
+	// await fund.setPrivateKey(recAcc0.privateKey)
+	//
 	// const pubK = fund.getPubKeyAny()
 	// console.log(pubK)
 
@@ -53,7 +77,7 @@ async function run() {
 	// fund.redelegate(valAddress, redelValAddress,10, delFee, "fund").then(response => console.log(response));
 	// fund.withdrawDelegationReward(valAddress, delFee, true).then(response => console.log(response));
 	// fund.getBalance().then(response => console.log(response));
-	fund.getTransactions('und15s4ec3s97tu4pstk8tq86l5ues4dxnmadqmrjl').then(response => console.log(response));
+	// fund.getTransactions('und15s4ec3s97tu4pstk8tq86l5ues4dxnmadqmrjl').then(response => console.log(response));
 	// fund.getTransactionsReceived().then(response => console.log(response));
 
 	// first, submit a proposal using the und cli, e.g.
