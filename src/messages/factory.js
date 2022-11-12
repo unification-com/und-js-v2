@@ -14,6 +14,31 @@ export const getPubKeyAny = (privKey) => {
   return pubKeyAny;
 }
 
+export const getMsgSendIbc = (from, sourceChannel, to, amount, denom, memo) => {
+  const msgSendIbc = new message.ibc.applications.transfer.v1.MsgTransfer({
+    source_port: 'transfer',
+    source_channel: sourceChannel,
+    token: {
+      denom,
+      amount
+    },
+    sender: from,
+    receiver: to,
+    timeout_height: {
+      revision_number: '1', // todo
+      revision_height: '7000000' // todo
+    },
+    timeout_timestamp: '0'
+  });
+
+  const msgSendIbcAny = new message.google.protobuf.Any({
+    type_url: '/ibc.applications.transfer.v1.MsgTransfer',
+    value: message.ibc.applications.transfer.v1.MsgTransfer.encode(msgSendIbc).finish()
+  });
+
+  return new message.cosmos.tx.v1beta1.TxBody( { messages: [ msgSendIbcAny ], memo } )
+}
+
 export const getMsgSendTx = (from, to, amount, denom, memo) => {
 
   const msgSend = new message.cosmos.bank.v1beta1.MsgSend({
