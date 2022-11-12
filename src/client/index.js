@@ -142,9 +142,9 @@ export class UndClient {
   }
 
   /**
-   * Transfer FUND to an address
+   * Transfer FUND via IBC to an address
    * @param {String} toAddress
-   * @param {String} chainId
+   * @param {String} channel
    * @param {Number} amount
    * @param {Object} fee
    * @param {String} denom optional denom
@@ -152,11 +152,11 @@ export class UndClient {
    * @param {String} memo optional memo
    * @returns {Promise<*>}
    */
-  async transferUndIbc(toAddress, chainId, amount, fee, denom = "nund", fromAddress = this.address, memo = "") {
+  async transferUndIbc(toAddress, channel, amount, fee, denom = "nund", fromAddress = this.address, memo = "") {
     if (!fromAddress) {
       throw new Error("fromAddress should not be empty")
     }
-    if(!chainId) {
+    if(!channel) {
       throw new Error("chainId should not be empty");
     }
     if (!toAddress) {
@@ -181,9 +181,8 @@ export class UndClient {
       throw new Error(accData.message)
     }
 
-    // todo get channelid for chainid
     // ---------------------------------- (1)txBody ----------------------------------
-    const txBody = msgFactory.getMsgSendIbc(fromAddress, 'channel-0', toAddress, amt, dnm, memo)
+    const txBody = msgFactory.getMsgSendIbc(fromAddress, channel, toAddress, amt, dnm, memo)
 
     // --------------------------------- (2)authInfo ---------------------------------
     const authInfo = this.compileAuthInfo(
