@@ -11,7 +11,7 @@ import { convertAmount } from "../utils"
 import * as msgFactory from "../messages/factory"
 import {
   getMsgBeginRedelegate,
-  getMsgRegisterWrkChain,
+  getMsgRegisterWrkChain, getMsgSendIbc,
   getMsgUndelegate, getMsgVote,
   getMsgWithdrawDelegatorReward
 } from "../messages/factory"
@@ -134,6 +134,63 @@ export class UndClient {
       feeAmt,
       feeDnm,
       fee.gas,
+    )
+
+    // -------------------------------- sign --------------------------------
+    const signedTxBytes = this.sign(txBody, authInfo);
+    return this.broadcast(signedTxBytes)
+  }
+
+  /**
+   * Transfer FUND to an address
+   * @param {String} toAddress
+   * @param {String} chainId
+   * @param {Number} amount
+   * @param {Object} fee
+   * @param {String} denom optional denom
+   * @param {String} fromAddress optional fromAddress
+   * @param {String} memo optional memo
+   * @returns {Promise<*>}
+   */
+  async transferUndIbc(toAddress, chainId, amount, fee, denom = "nund", fromAddress = this.address, memo = "") {
+    if (!fromAddress) {
+      throw new Error("fromAddress should not be empty")
+    }
+    if(!chainId) {
+      throw new Error("chainId should not be empty");
+    }
+    if (!toAddress) {
+      throw new Error("toAddress should not be empty")
+    }
+    if(amount === 0) {
+      throw new Error("amount should not be zero")
+    }
+    if(!fundCrypto.checkAddress(fromAddress, this.bech32MainPrefix)) {
+      throw new Error("invalid fromAddress")
+    }
+
+    // todo check validity of chainId
+
+    checkNumber(amount, "amount")
+    const { amt, dnm } = convertAmount(amount, denom)
+    const { amt: feeAmt, dnm: feeDnm } = convertAmount(fee.amount, fee.denom)
+
+    const accData = await this.getAccount(fromAddress)
+
+    if(accData?.code) {
+      throw new Error(accData.message)
+    }
+
+    // todo get channelid for chainid
+    // ---------------------------------- (1)txBody ----------------------------------
+    const txBody = msgFactory.getMsgSendIbc(fromAddress, 'channel-0', toAddress, amt, dnm, memo)
+
+    // --------------------------------- (2)authInfo ---------------------------------
+    const authInfo = this.compileAuthInfo(
+        accData.account.sequence,
+        feeAmt,
+        feeDnm,
+        fee.gas,
     )
 
     // -------------------------------- sign --------------------------------
